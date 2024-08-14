@@ -1,0 +1,110 @@
+      nav{
+        margin-block-end: 12px;
+      }
+      span{
+            color: seagreen;
+            font-size: 23px;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+            font-weight: bold;
+            padding: 20px;
+        }
+        .imageheader{
+            padding: 10px 0px;
+            position: relative;   
+        }
+        .img_description { 
+            position: absolute; 
+            top: 3; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            color: white; 
+            visibility: hidden; 
+            font-size: 50px; 
+            Text-align:center;
+            background-color: lightslategray;
+        } 
+
+        .imageheader:hover .img_description{
+            visibility: visible; 
+           
+        }
+        .profile{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 5px;  
+
+        }
+        .profile p{
+            color: seagreen;
+            font-size: 23px;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+
+        }
+        .profile img{
+            border-radius: 100%; 
+            width: 200p;   
+        }  
+        .Projects{
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            padding-top: 17px;
+            gap: 10px;
+        }
+
+        .Projects img {
+            border-radius: 20%;
+        }
+        .Projects p{
+            color: seagreen;
+            font-size: 23px;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+            text-align: justify;
+            width: 20%;
+
+        }
+
+        .photos{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 5px; 
+            font-weight: bold;
+        }
+        .photos p{
+            color: seagreen;
+            font-size: 23px;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+        }
+        .photos2 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
+        .photos2 img {
+            width: 100%;
+           
+            border-radius: 10px;
+        }
+
+        @media (max-width: 1200px) {
+            .photos2 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 900px) {
+            .photos2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .photos2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    
