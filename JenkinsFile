@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+    environment {
+        GITHUB_REPO = 'https://github.com/Palak4796/task1.1p313.git'
+        EMAIL = 'palakdankher@gmail.com'
+    }
+
+    triggers {
+        pollSCM('H/2 * * * *') // Polls GitHub every 2 minutes
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: "${GITHUB_REPO}"
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the project...'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat(script: "echo Running tests... ")
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Test Stage Result: ${currentBuild.currentResult}",
+                        to: "${env.EMAIL}",
+                        attachLog: true,
+                        body: "Test stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+                    )
+                }
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                bat(script: "echo Running security scan... ")
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Security Scan Stage Result: ${currentBuild.currentResult}",
+                        to: "${env.EMAIL}",
+                        attachLog: true,
+                        body: "Security Scan stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+                    )
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the project...'
+            }
+        }
+    }
+
+    post {
+        always {
+            emailext(
+                subject: "Final Stage Result: ${currentBuild.currentResult}",
+                to: "${env.EMAIL}",
+                attachLog: true,
+                body: "The pipeline has completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+            )
+        }
+    }
+}
