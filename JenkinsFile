@@ -13,27 +13,64 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
+                echo 'Tool Used: Git - Cloning repository from GitHub'
                 git branch: 'main', url: "${GITHUB_REPO}"
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Stage: Checkout Code - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
+                        attachLog: true,
+                        body: "Checkout stage completed with status: ${currentBuild.currentResult}.\nSee attached logs."
+                    )
+                }
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the project...'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                bat(script: "echo Running tests... ")
+                echo 'Tool Used: Maven - Building the project'
             }
             post {
                 always {
                     emailext(
-                        subject: "Test Stage Result: ${currentBuild.currentResult}",
-                        to: "${env.EMAIL}",
+                        subject: "Stage: Build - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
                         attachLog: true,
-                        body: "Test stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+                        body: "Build stage completed with status: ${currentBuild.currentResult}.\nSee attached logs."
+                    )
+                }
+            }
+        }
+
+        stage('Unit and Integration Tests') {
+            steps {
+                echo 'Tool Used: JUnit (via Maven) - Running unit and integration tests'
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Stage: Unit & Integration Tests - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
+                        attachLog: true,
+                        body: "Test stage completed with status: ${currentBuild.currentResult}.\nSee attached logs."
+                    )
+                }
+            }
+        }
+
+        stage('Code Analysis') {
+            steps {
+                echo 'Tool Used: SonarQube - Performing static code analysis'
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Stage: Code Analysis - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
+                        attachLog: true,
+                        body: "Code analysis stage completed with status: ${currentBuild.currentResult}.\nSee attached logs."
                     )
                 }
             }
@@ -41,35 +78,90 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                bat(script: "echo Running security scan... ")
+                echo 'Tool Used: OWASP Dependency-Check - Performing security scan'
             }
             post {
                 always {
                     emailext(
-                        subject: "Security Scan Stage Result: ${currentBuild.currentResult}",
-                        to: "${env.EMAIL}",
+                        subject: "Stage: Security Scan - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
                         attachLog: true,
-                        body: "Security Scan stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+                        body: "Security scan stage completed with status: ${currentBuild.currentResult}.\nSee attached logs."
                     )
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Staging') {
             steps {
-                echo 'Deploying the project...'
+                echo 'Tool Used: WinSCP or SCP - Deploying to staging environment'
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Stage: Deploy to Staging - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
+                        attachLog: true,
+                        body: "Deployment to staging completed with status: ${currentBuild.currentResult}.\nSee attached logs."
+                    )
+                }
+            }
+        }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Tool Used: Postman or JUnit - Running integration tests on staging'
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Stage: Integration Tests on Staging - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
+                        attachLog: true,
+                        body: "Integration tests on staging completed with status: ${currentBuild.currentResult}.\nSee attached logs."
+                    )
+                }
+            }
+        }
+
+        stage('Approval') {
+            steps {
+                echo 'Waiting for manual approval before production deployment...'
+                sleep 10 // Simulated manual approval
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Stage: Approval - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
+                        attachLog: true,
+                        body: "Approval stage simulated with sleep. Status: ${currentBuild.currentResult}.\nSee attached logs."
+                    )
+                }
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                echo 'Tool Used: WinSCP or SCP - Deploying to production environment'
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Stage: Deploy to Production - ${currentBuild.currentResult}",
+                        to: "${EMAIL}",
+                        attachLog: true,
+                        body: "Deployment to production completed with status: ${currentBuild.currentResult}.\nSee attached logs."
+                    )
+                }
             }
         }
     }
 
     post {
         always {
-            emailext(
-                subject: "Final Stage Result: ${currentBuild.currentResult}",
-                to: "${env.EMAIL}",
-                attachLog: true,
-                body: "The pipeline has completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
-            )
+            echo "Pipeline completed with status: ${currentBuild.currentResult}"
         }
     }
 }
+
