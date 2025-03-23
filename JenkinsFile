@@ -13,7 +13,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                echo 'Tool Used: Git - Cloning repository from GitHub'
+                echo 'Tool can be used: Git, GitHub CLI, GitLab SCM Plugin'
+                echo ' Cloning the project repository from GitHub'
                 git branch: 'main', url: "${GITHUB_REPO}"
             }
             post {
@@ -30,7 +31,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Tool Used: Maven - Building the project'
+                echo 'Tool can be used: Maven, Gradle, Ant, Bazel'
+                echo ' Building the project to ensure all dependencies and code compile correctly'
             }
             post {
                 always {
@@ -46,7 +48,8 @@ pipeline {
 
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Tool Used: JUnit (via Maven) - Running unit and integration tests'
+                echo 'Tool can be used: JUnit via Maven, TestNG, Spock, NUnit (for .NET)'
+                echo 'Executes unit and integration tests to verify code functionality and correctness.'
             }
             post {
                 always {
@@ -62,7 +65,8 @@ pipeline {
 
         stage('Code Analysis') {
             steps {
-                echo 'Tool Used: SonarQube - Performing static code analysis'
+                echo 'Tool can be used: SonarQube, PMD, Checkstyle, CodeClimate'
+                echo ' Performs static code analysis  to detect bugs and maintain code quality.'
             }
             post {
                 always {
@@ -78,7 +82,8 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                echo 'Tool Used: OWASP Dependency-Check - Performing security scan'
+                echo 'Tool can be used: OWASP Dependency-Check, Snyk, Sonatype Nexus, Whitesource'
+                echo 'Runs OWASP Dependency-Check to identify known vulnerabilities in dependencies'
             }
             post {
                 always {
@@ -94,7 +99,8 @@ pipeline {
 
         stage('Deploy to Staging') {
             steps {
-                echo 'Tool Used: WinSCP or SCP - Deploying to staging environment'
+                echo 'Tool  can be used: WinSCP, Ansible, Jenkins Publish Over SSH, FTP'
+                echo 'Transfers the built application to a staging server for pre-production testing'
             }
             post {
                 always {
@@ -110,7 +116,8 @@ pipeline {
 
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Tool Used: Postman or JUnit - Running integration tests on staging'
+                echo 'Tool can be used: Postman, JUnit, REST Assured, Karate DSL, Newman CLI'
+                echo 'Executes integration tests on the staging server to simulate real-world usage'
             }
             post {
                 always {
@@ -126,8 +133,9 @@ pipeline {
 
         stage('Approval') {
             steps {
-                echo 'Waiting for manual approval before production deployment...'
-                sleep 10 // Simulated manual approval
+                echo 'Simulating Manual Approval - Tool can be used : Slack Approval Plugin, Jira Integration'
+                echo 'Introduces a manual approval step before deploying to production to ensure verification'
+                sleep 10
             }
             post {
                 always {
@@ -143,7 +151,8 @@ pipeline {
 
         stage('Deploy to Production') {
             steps {
-                echo 'Tool Used: WinSCP or SCP - Deploying to production environment'
+                echo 'Tool can be used: WinSCP, SCP, Ansible, Docker, Kubernetes, Jenkins FTP plugin'
+                echo 'Deploys the final, tested build to the production server for end-user access'
             }
             post {
                 always {
@@ -164,4 +173,3 @@ pipeline {
         }
     }
 }
-
